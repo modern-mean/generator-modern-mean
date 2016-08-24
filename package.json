@@ -4,7 +4,7 @@
   "description": "Generator for modern mean apps and modules",
   "main": "generators/app/index.js",
   "files": [
-    "generators"
+    "generators/app"
   ],
   "scripts": {
     "coverage": "gulp test:coverage",
