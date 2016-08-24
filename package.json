@@ -1,6 +1,6 @@
 {
   "name": "@modern-mean/generator-modern-mean",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generator for modern mean apps and modules",
   "main": "generators/app/index.js",
   "files": [
