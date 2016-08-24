@@ -1,0 +1,36 @@
+{
+  "name": "@modern-mean/generator-modern-mean",
+  "version": "0.0.1",
+  "description": "Generator for modern mean apps and modules",
+  "main": "generators/app/index.js",
+  "files": [
+    "generators"
+  ],
+  "scripts": {
+    "test": "scripts/test",
+    "start": "scripts/start",
+    "clean": "scripts/clean",
+    "build": "scripts/build",
+    "lint": "scripts/lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modern-mean/generator.git"
+  },
+  "author": "Andrew Throener",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/modern-mean/generator/issues"
+  },
+  "homepage": "https://github.com/modern-mean/generator#readme",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "generator-npm-init": "^1.2.2",
+    "yeoman-generator": "^0.24.1"
+  },
+  "devDependencies": {
+    "@modern-mean/build-gulp": "0.0.12",
+    "babel-cli": "^6.11.4",
+    "babel-preset-es2015": "^6.13.2"
+  }
+}
