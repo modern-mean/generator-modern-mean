@@ -33,6 +33,6 @@ let defaultTask = gulp.series(clean, builder.build.src, genRename, cleanDist);
 defaultTask.displayName = 'default';
 gulp.task(defaultTask);
 
-let test = gulp.series(builder.test.src);
+let test = gulp.series(builder.lint.all);
 test.displayName = 'test';
 gulp.task(test);

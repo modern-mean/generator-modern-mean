@@ -3,7 +3,7 @@ import chalk from 'chalk';
 
 class ModernMeanGenerator extends Base {
 
-  constructor( ...args ) {
+  constructor(...args) {
     super(...args);
 
     this.npmDependencies = [
