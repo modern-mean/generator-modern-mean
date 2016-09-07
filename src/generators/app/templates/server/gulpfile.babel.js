@@ -1,5 +1,3 @@
-'use strict';
-
 import gulp from 'gulp';
 import * as serve from '@modern-mean/serve-gulp';
 import * as builder from '@modern-mean/build-gulp';

@@ -3,7 +3,7 @@
   "version": "<%= version %>",
   "description": "<%= description %>",
   "keywords": "<%= keywords %>",
-  "main": "index.js",
+  "main": "/dist/index.js",
   "engines": {
     "node": ">=6.4",
     "npm": ">=3.10.3"
@@ -17,15 +17,6 @@
     "release:minor": "npm test && npm run build && npm version minor",
     "release:major": "npm test && npm run build && npm version major"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+<%= gitbase %>.git"
-  },
   "author": "<%= author %>",
-  "license": "<%= license %>",
-  "bugs": {
-    "url": "<%= gitbase %>/issues"
-  },
-  "homepage": "<%= gitbase %>#readme",
   "dependencies": { }
 }

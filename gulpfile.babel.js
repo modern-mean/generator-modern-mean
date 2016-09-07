@@ -1,5 +1,3 @@
-'use strict';
-
 import gulp from 'gulp';
 import * as builder from '@modern-mean/build-gulp';
 import del from 'del';
@@ -14,25 +12,30 @@ function clean() {
 clean.displayName = 'clean';
 gulp.task(clean);
 
-function cleanDist() {
-  return del([
-    './dist',
-  ]);
-}
-cleanDist.displayName = 'cleanDist';
-gulp.task(cleanDist);
-
 function genRename() {
   return gulp.src('./dist/generators/**/*')
     .pipe(gulp.dest('./generators'));
 };
 
-//Gulp Default
-//let defaultTask = gulp.series(modules.clean, modules.server.config, gulp.parallel(modules.client.build, modules.server.build));
-let defaultTask = gulp.series(clean, builder.build.src, genRename, cleanDist);
-defaultTask.displayName = 'default';
-gulp.task(defaultTask);
+//gulp build
+let build = gulp.series(clean, builder.build.src, genRename, builder.build.clean);
+build.displayName = 'build';
+gulp.task(build);
 
+//gulp test
 let test = gulp.series(builder.lint.all);
 test.displayName = 'test';
 gulp.task(test);
+
+//gulp
+let defaultTask = gulp.series(build);
+defaultTask.displayName = 'default';
+gulp.task(defaultTask);
+
+//gulp watch
+function watchFiles() {
+  return gulp.watch(['./src/**/*'], gulp.series(build));
+}
+let watch = gulp.series(build, watchFiles);
+watch.displayName = 'watch';
+gulp.task(watch);
