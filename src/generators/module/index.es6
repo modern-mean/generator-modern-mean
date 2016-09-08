@@ -3,13 +3,34 @@ import chalk from 'chalk';
 import merge from 'lodash.merge';
 import path from 'path';
 
+let MMModules = [
+  {
+    name: 'Mongoose Module',
+    value: '@modern-mean/server-mongoose-module'
+  }
+];
+
 class ModernMeanGenerator extends Base {
 
   constructor(...args) {
     super(...args);
 
+    this.npmDependencies = [
+      '@modern-mean/server-base-module'
+    ];
+
     this.npmDevDependencies = [
-      '@modern-mean/build-gulp'
+      'babel-core',
+      'babel-plugin-istanbul',
+      'babel-preset-es2015-node6',
+      'chai',
+      'chai-as-promised',
+      'cross-env',
+      'eslint',
+      'nyc',
+      'sinon',
+      'sinon-as-promised',
+      'sinon-chai'
     ];
 
     this.option('name', {
@@ -17,6 +38,13 @@ class ModernMeanGenerator extends Base {
       alias: 'n',
       desc: 'Package Name',
       defaults: path.basename(process.cwd())
+    });
+
+    this.option('class', {
+      type: String,
+      alias: 'c',
+      desc: 'Class Name',
+      defaults: 'MMNewModule'
     });
 
     this.option('description', {
@@ -100,6 +128,11 @@ class ModernMeanGenerator extends Base {
         name: 'travis',
         message: 'Use Travis CI?',
         default: true
+      },
+      {
+        name: 'class',
+        message: 'New Module Class Name',
+        default: this.options.class
       }
     ];
     return this.prompt(prompts).then(answers => {
@@ -206,19 +239,27 @@ class ModernMeanGenerator extends Base {
       );
     }
 
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath('src'),
-      this.destinationPath('src')
+      this.destinationPath('src'),
+      {
+        classname: this.config.get('module').class
+      }
     );
 
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath('tests'),
-      this.destinationPath('tests')
+      this.destinationPath('tests'),
+      {
+        classname: this.config.get('module').class
+      }
     );
+
   }
 
   install() {
-
+    this.npmInstall(this.npmDependencies, { 'save': true });
+    this.npmInstall(this.npmDevDependencies, { 'saveDev': true });
   }
 
   end() {

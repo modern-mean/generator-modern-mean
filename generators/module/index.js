@@ -16,18 +16,32 @@ var _path2 = _interopRequireDefault(_path);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+let MMModules = [{
+  name: 'Mongoose Module',
+  value: '@modern-mean/server-mongoose-module'
+}];
+
 class ModernMeanGenerator extends _yeomanGenerator.Base {
 
   constructor(...args) {
     super(...args);
 
-    this.npmDevDependencies = ['@modern-mean/build-gulp'];
+    this.npmDependencies = ['@modern-mean/server-base-module'];
+
+    this.npmDevDependencies = ['babel-core', 'babel-plugin-istanbul', 'babel-preset-es2015-node6', 'chai', 'chai-as-promised', 'cross-env', 'eslint', 'nyc', 'sinon', 'sinon-as-promised', 'sinon-chai'];
 
     this.option('name', {
       type: String,
       alias: 'n',
       desc: 'Package Name',
       defaults: _path2.default.basename(process.cwd())
+    });
+
+    this.option('class', {
+      type: String,
+      alias: 'c',
+      desc: 'Class Name',
+      defaults: 'MMNewModule'
     });
 
     this.option('description', {
@@ -102,6 +116,10 @@ class ModernMeanGenerator extends _yeomanGenerator.Base {
       name: 'travis',
       message: 'Use Travis CI?',
       default: true
+    }, {
+      name: 'class',
+      message: 'New Module Class Name',
+      default: this.options.class
     }];
     return this.prompt(prompts).then(answers => {
       answers.keywords = answers.keywords.split(',').map(item => item.trim());
@@ -176,12 +194,19 @@ class ModernMeanGenerator extends _yeomanGenerator.Base {
       this.fs.copy(this.templatePath('_travis.yml'), this.destinationPath('.travis.yml'));
     }
 
-    this.fs.copy(this.templatePath('src'), this.destinationPath('src'));
+    this.fs.copyTpl(this.templatePath('src'), this.destinationPath('src'), {
+      classname: this.config.get('module').class
+    });
 
-    this.fs.copy(this.templatePath('tests'), this.destinationPath('tests'));
+    this.fs.copyTpl(this.templatePath('tests'), this.destinationPath('tests'), {
+      classname: this.config.get('module').class
+    });
   }
 
-  install() {}
+  install() {
+    this.npmInstall(this.npmDependencies, { 'save': true });
+    this.npmInstall(this.npmDevDependencies, { 'saveDev': true });
+  }
 
   end() {}
 }
