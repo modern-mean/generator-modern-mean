@@ -28,7 +28,7 @@ class ModernMeanGenerator extends _yeomanGenerator.Base {
 
     this.npmDependencies = ['@modern-mean/server-base-module'];
 
-    this.npmDevDependencies = ['babel-core', 'babel-plugin-istanbul', 'babel-preset-es2015-node6', 'chai', 'chai-as-promised', 'cross-env', 'eslint', 'nyc', 'sinon', 'sinon-as-promised', 'sinon-chai'];
+    this.npmDevDependencies = ['babel-core', 'babel-cli', 'babel-plugin-istanbul', 'babel-preset-es2015-node6', 'chai', 'chai-as-promised', 'coveralls', 'cross-env', 'eslint', 'mocha', 'nyc', 'sinon', 'sinon-as-promised', 'sinon-chai'];
 
     this.option('name', {
       type: String,
@@ -188,7 +188,6 @@ class ModernMeanGenerator extends _yeomanGenerator.Base {
     this.fs.copy(this.templatePath('_eslintrc'), this.destinationPath('.eslintrc'));
     this.fs.copy(this.templatePath('_gitignore'), this.destinationPath('.gitignore'));
     this.fs.copy(this.templatePath('_npmignore'), this.destinationPath('.npmignore'));
-    this.fs.copy(this.templatePath('gulpfile.babel.js'), this.destinationPath('gulpfile.babel.js'));
 
     if (config.travis) {
       this.fs.copy(this.templatePath('_travis.yml'), this.destinationPath('.travis.yml'));
