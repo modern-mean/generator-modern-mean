@@ -1,0 +1,20 @@
+{
+  "generator-github-create": {
+    "readme": {
+      "title": "generator-modern-mean",
+      "description": "Yeoman generator for Modern Mean application and modules",
+      "usebadges": true,
+      "badges": [
+        "travis",
+        "coveralls",
+        "david",
+        "davidDev",
+        "gitter",
+        "npm"
+      ],
+      "profile": "modern-mean",
+      "repository": "generator-modern-mean",
+      "scoped": true
+    }
+  }
+}
