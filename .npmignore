@@ -3,6 +3,8 @@
 .eslintrc
 .gitignore
 .travis.yml
-gulpfile.babel.js
-index.es6
+.yo-rc.json
 src/
+test/
+coverage/
+.nyc_output

@@ -21,12 +21,15 @@ class ModernMeanGenerator extends Base {
 
     this.npmDevDependencies = [
       'babel-core',
+      'babel-cli',
       'babel-plugin-istanbul',
       'babel-preset-es2015-node6',
       'chai',
       'chai-as-promised',
+      'coveralls',
       'cross-env',
       'eslint',
+      'mocha',
       'nyc',
       'sinon',
       'sinon-as-promised',
@@ -226,10 +229,6 @@ class ModernMeanGenerator extends Base {
     this.fs.copy(
       this.templatePath('_npmignore'),
       this.destinationPath('.npmignore')
-    );
-    this.fs.copy(
-      this.templatePath('gulpfile.babel.js'),
-      this.destinationPath('gulpfile.babel.js')
     );
 
     if (config.travis) {
