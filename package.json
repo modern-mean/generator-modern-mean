@@ -1,6 +1,6 @@
 {
   "name": "@modern-mean/generator-modern-mean",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Generator for modern mean apps and modules",
   "keywords": "yeoman-generator",
   "main": "generators/app/index.js",
