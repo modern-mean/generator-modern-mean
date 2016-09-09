@@ -60,7 +60,7 @@
       "text-summary"
     ],
     "include": [
-      "src/**/*.js"
+      "src/**/*.es6"
     ],
     "exclude": [
       "tests/**/*"
