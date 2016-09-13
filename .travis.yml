@@ -5,6 +5,7 @@ node_js:
 
 before_install:
   - npm i nsp -g
+  - npm install -g generator-github-create
 
 after_script:
   - nsp audit-package
