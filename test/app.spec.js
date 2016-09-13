@@ -2,7 +2,7 @@ import path from 'path';
 
 let sandbox;
 
-describe('generator-modern-mean:module', () => {
+describe('generator-modern-mean:app', () => {
 
   beforeEach(() => {
     return sandbox = sinon.sandbox.create();

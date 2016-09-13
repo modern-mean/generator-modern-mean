@@ -1,12 +1,13 @@
-import { MMBase } from '@modern-mean/server-base-module';
+import { <%= extendmodule.name %> } from '<%= extendmodule.module %>';
 import config from './config';
 import logger from './logger';
 
-export class <%= classname %> extends MMBase {
+
+export class <%= classname %> extends <%= extendmodule.name %> {
 
   constructor(...args) {
     //Push default configuration to front of array.  Passed in configuration from ...args should take precedence.
-    args.unshift({ MMConfig: config, MMLogger: logger });
+    args.unshift({ config: config(), logger: logger() });
     super(...args);
 
     this.config = this.getConfigModule().get();

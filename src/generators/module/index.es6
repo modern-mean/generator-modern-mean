@@ -1,257 +1,137 @@
 import { Base } from 'yeoman-generator';
 import chalk from 'chalk';
 import merge from 'lodash.merge';
+import defaults from 'lodash.defaults';
+import kebab from 'lodash.kebabcase';
+import camel from 'lodash.camelcase';
+import upperFirst from 'lodash.upperfirst';
 import path from 'path';
+import * as packageConfig from '../shared/package';
+import yosay from 'yosay';
 
-let MMModules = [
-  {
-    name: 'Mongoose Module',
-    value: '@modern-mean/server-mongoose-module'
-  }
-];
 
-class ModernMeanGenerator extends Base {
+class ModernMeanModuleGenerator extends Base {
 
   constructor(...args) {
     super(...args);
 
-    this.npmDependencies = [
-      '@modern-mean/server-base-module'
-    ];
-
-    this.npmDevDependencies = [
-      'babel-core',
-      'babel-cli',
-      'babel-plugin-istanbul',
-      'babel-preset-es2015-node6',
-      'chai',
-      'chai-as-promised',
-      'coveralls',
-      'cross-env',
-      'eslint',
-      'mocha',
-      'nyc',
-      'sinon',
-      'sinon-as-promised',
-      'sinon-chai'
-    ];
-
-    this.option('name', {
+    this.option('nosay', {
       type: String,
       alias: 'n',
-      desc: 'Package Name',
-      defaults: path.basename(process.cwd())
+      desc: 'No Yo Say'
     });
 
-    this.option('class', {
+    this.option('createrepository', {
       type: String,
       alias: 'c',
-      desc: 'Class Name',
-      defaults: 'MMNewModule'
+      desc: 'Create remote github repository'
     });
 
-    this.option('description', {
-      type: String,
-      alias: 'd',
-      desc: 'Package Description'
-    });
+    this.npmDependencies = [];
+    this.npmDevDependencies = packageConfig.devDependencies;
 
-    this.option('keywords', {
-      type: String,
-      alias: 'k',
-      desc: 'Package Keywords'
-    });
-
-    this.option('version', {
-      type: String,
-      alias: 'v',
-      desc: 'Package Version',
-      defaults: '0.0.0'
-    });
-
-    this.option('author', {
-      type: String,
-      alias: 'a',
-      desc: 'Package Version',
-      defaults: this.user.git.name()
-    });
-
-    this.option('email', {
-      type: String,
-      alias: 'e',
-      desc: 'Author Email',
-      defaults: this.user.git.email()
-    });
-
-    this.option('license', {
-      type: String,
-      alias: 'a',
-      desc: 'Package License'
-    });
   }
 
   initializing() {
 
+    this.options = defaults(this.options, this.config.get('module'), {
+      createrepository: true,
+      nosay: true
+    });
+
+    /* istanbul ignore if: Since yosay can't be stubbed properly */
+    if (!this.options.nosay) {
+      console.log(yosay('Welcome to the Modern-Mean module generator!'));
+    }
+
+    this.composeWith('@modern-mean/modern-mean:skeleton', {
+      options: {
+        nosay: true
+      }
+    }, {
+      //local: require.resolve('@modern-mean/generator-modern-mean/generators/skeleton')
+    });
+
   }
 
   prompting() {
-    let prompts = [
-      {
-        name: 'name',
-        message: 'Package Name',
-        default: this.options.name
-      },
-      {
-        name: 'version',
-        message: 'Package Version',
-        default: this.options.version
-      },
-      {
-        name: 'description',
-        message: 'Package Description',
-        default: this.options.description
-      },
-      {
-        name: 'keywords',
-        message: 'Package Keywords(comma separated)',
-        default: this.options.description
-      },
-      {
-        name: 'author',
-        message: 'Package Author',
-        default: this.options.author
-      },
-      {
-        name: 'email',
-        message: 'Author Email',
-        default: this.options.email
-      },
-      {
-        type: 'confirm',
-        name: 'travis',
-        message: 'Use Travis CI?',
-        default: true
-      },
-      {
-        name: 'class',
-        message: 'New Module Class Name',
-        default: this.options.class
-      }
-    ];
-    return this.prompt(prompts).then(answers => {
-      answers.keywords = answers.keywords.split(',').map(item => item.trim());
-      this.config.set('module', answers);
-      return answers;
-    })
-    .then(answers => {
-      this.composeWith('license', {
-        options: {
-          name: answers.author,
-          email: answers.email,
-          website: 'test'
+    let prompts = [{
+      type: 'confirm',
+      name: 'createrepository',
+      message: 'Create remote github repository?',
+      default: this.options.createrepository
+    }];
+
+    return this.prompt(prompts)
+      .then(answers => {
+        this.config.set('module', answers);
+        /* istanbul ignore next: Not needed */
+        if (answers.createrepository) {
+          this.composeWith('github-create:authenticate', {}, {
+            //local: require.resolve('generator-github-create/generators/authenticate')
+          });
+          this.composeWith('github-create:create', {}, {
+            //local: require.resolve('generator-github-create/generators/create')
+          });
         }
-      }, {
-        local: require.resolve('generator-license/app')
+        this.composeWith('github-create:package', {}, {
+          //local: require.resolve('generator-github-create/generators/package')
+        });
       });
-    })
-    .then(() => {
-      return [{
-        type: 'confirm',
-        name: 'createrepository',
-        message: 'Create remote github repository?',
-        default: true
-      }];
-    })
-    .then(prompts => this.prompt(prompts))
-    .then(answers => {
-      this.config.set('module', merge(this.config.get('module'), answers));
-    });
   }
 
   configuring() {
-    this.config.save();
+    return this.config.save();
   }
 
   default() {
-    let config = this.config.get('module');
-    if (config.createrepository) {
-      this.composeWith('github-create:authenticate', {}, {
-        local: require.resolve('generator-github-create/generators/authenticate')
-      });
-      this.composeWith('github-create:orgs', {}, {
-        local: require.resolve('generator-github-create/generators/orgs')
-      });
-      this.composeWith('github-create:create', {
-        options: {
-          name: config.name,
-          description: config.description
-        }
-      }, {
-        local: require.resolve('generator-github-create/generators/create')
-      });
-
+    /* istanbul ignore next: dont know how to mock this */
+    if (this.config.get('skeleton')) {
+      this.npmDependencies.push(this.config.get('skeleton').extendModule.module);
     }
   }
 
   writing() {
     let config = this.config.get('module');
-
-    if (this.config.get('module').createrepository) {
-
+    /* istanbul ignore next: not needed */
+    if (config.createrepository) {
       this.composeWith('github-create:readme', {}, {
-        local: require.resolve('generator-github-create/generators/readme')
+        //local: require.resolve('generator-github-create/generators/readme')
       });
-
     }
 
-    this.fs.copyTpl(
-      this.templatePath('_package.json'),
-      this.destinationPath('package.json'),
-      { name: config.name, version: config.version, description: config.description, keywords: config.keywords, author: config.author, repository: config.repository }
-    );
+    let pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
+    /* istanbul ignore next: Not sure how to mock this */
+    if (!pkg) {
+      pkg = this.fs.readJSON(this.fs.writeJSON(this.destinationPath('package.json'), {}));
+    }
+    pkg.scripts = packageConfig.appScripts;
+    pkg.nyc = packageConfig.nycConfig;
+    this.fs.writeJSON(this.destinationPath('package.json'), pkg);
 
     this.fs.copy(
-      this.templatePath('_babelrc'),
+      this.templatePath('../../module/templates/_babelrc'),
       this.destinationPath('.babelrc')
     );
     this.fs.copy(
-      this.templatePath('_editorconfig'),
+      this.templatePath('../../module/templates/_editorconfig'),
       this.destinationPath('.editorconfig')
     );
     this.fs.copy(
-      this.templatePath('_eslintrc'),
+      this.templatePath('../../module/templates/_eslintrc'),
       this.destinationPath('.eslintrc')
     );
     this.fs.copy(
-      this.templatePath('_gitignore'),
+      this.templatePath('../../module/templates/_gitignore'),
       this.destinationPath('.gitignore')
     );
     this.fs.copy(
-      this.templatePath('_npmignore'),
+      this.templatePath('../../module/templates/_npmignore'),
       this.destinationPath('.npmignore')
     );
-
-    if (config.travis) {
-      this.fs.copy(
-        this.templatePath('_travis.yml'),
-        this.destinationPath('.travis.yml')
-      );
-    }
-
-    this.fs.copyTpl(
-      this.templatePath('src'),
-      this.destinationPath('src'),
-      {
-        classname: this.config.get('module').class
-      }
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('tests'),
-      this.destinationPath('tests'),
-      {
-        classname: this.config.get('module').class
-      }
+    this.fs.copy(
+      this.templatePath('../../module/templates/_travis.yml'),
+      this.destinationPath('.travis.yml')
     );
 
   }
@@ -266,4 +146,4 @@ class ModernMeanGenerator extends Base {
   }
 }
 
-module.exports = ModernMeanGenerator;
+module.exports = ModernMeanModuleGenerator;
