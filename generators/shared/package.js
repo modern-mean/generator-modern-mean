@@ -36,7 +36,6 @@ let moduleScripts = exports.moduleScripts = {
 let nycConfig = exports.nycConfig = {
   'sourceMap': false,
   'instrument': false,
-  'reporter': ['lcov', 'text', 'text-summary'],
   'include': ['src/**/*.js'],
   'exclude': ['tests/**/*'],
   'all': true

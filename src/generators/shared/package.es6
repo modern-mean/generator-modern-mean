@@ -48,11 +48,6 @@ export let moduleScripts = {
 export let nycConfig = {
   'sourceMap': false,
   'instrument': false,
-  'reporter': [
-    'lcov',
-    'text',
-    'text-summary'
-  ],
   'include': [
     'src/**/*.js'
   ],
