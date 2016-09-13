@@ -12,7 +12,8 @@ let app = exports.app = {
     'postversion': 'git push && git push --tags && npm publish --access public',
     'test': 'npm run lint && cross-env NODE_ENV=test nyc mocha test/*.spec.js',
     'test:watch': 'npm run lint && cross-env NODE_ENV=test nyc mocha --watch test/**/*.spec.js',
-    'start:dev': 'cross-env NODE_ENV=development nodemon'
+    'start:dev': 'cross-env NODE_ENV=development nodemon',
+    'start:debug': 'cross-env NODE_ENV=debug nodemon'
   },
   devDependencies: ['nodemon', 'babel-core', 'babel-cli', 'babel-plugin-istanbul', 'babel-preset-es2015-node6', 'chai', 'chai-as-promised', 'coveralls', 'cross-env', 'eslint', 'mocha', 'nyc', 'sinon', 'sinon-as-promised', 'sinon-chai'],
   dependencies: ['forever', 'chalk']

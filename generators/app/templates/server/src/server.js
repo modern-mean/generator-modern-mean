@@ -1,6 +1,8 @@
+import * as environments from './environments';
 <% if (modules.api) { %>import { ApiModule } from '@modern-mean/server-api-module';<% } %>
 
 //Initialization
+environments[process.env.NODE_ENV]();
 <% if (modules.api) { %>
 //Override Express Config https://github.com/modern-mean/server-express-module/blob/master/src/config.js
 //Override API Config https://github.com/modern-mean/server-api-module/blob/master/src/config.js
